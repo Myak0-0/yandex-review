@@ -52,6 +52,7 @@ const props = defineProps({ yandexData: Object });
                             <span v-for="i in 5" :key="i" :class="['star', { active: i <= Math.floor(props.yandexData.rating) }]">★</span>
                         </div>
                     </div>
+                    <hr>
                     <div class="rating-count">
                         Всего отзывов: {{ props.yandexData.reviews_count }}
                     </div>
@@ -142,17 +143,23 @@ const props = defineProps({ yandexData: Object });
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
+.rating-card hr {
+    border: 1px solid #F1F4F7;
+}
+
 .rating-score-row {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 16px;
+    margin-bottom: 10px;
 }
 
 .rating-value {
+    font-family: monospace;
     font-size: 44px;
-    font-weight: 700;
+    font-weight: 500;
     line-height: 1;
+    letter-spacing: -5px;
 }
 
 .rating-stars-large {
@@ -161,8 +168,9 @@ const props = defineProps({ yandexData: Object });
 }
 
 .rating-count {
-    color: #6b7280;
+    color: #363740;
     font-size: 14px;
+    margin: 15px 0;
 }
 
 .no-review {

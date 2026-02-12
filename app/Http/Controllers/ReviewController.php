@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Review;
 use App\Models\Setting;
-use Inertia\Inertia;
 
 class ReviewController extends Controller
 {

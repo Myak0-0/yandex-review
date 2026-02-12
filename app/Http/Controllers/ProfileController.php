@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Setting;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -59,5 +60,28 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    // Страница отзывов
+    public function reviews()
+    {
+        $url = Setting::where('key', 'yandex_map_url')->value('value');
+        $data = [];
+        
+        if ($url) {
+            $data = (new \App\Services\YandexParserService())->parseReviews($url);
+        }
+
+        return Inertia::render('Reviews', [
+            'yandexData' => $data // Эти данные улетят прямо во Vue
+        ]);
+    }
+
+    // Страница настроек
+    public function settings()
+    {
+        return Inertia::render('Settings', [
+            'currentUrl' => Setting::where('key', 'yandex_map_url')->value('value')
+        ]);
     }
 }

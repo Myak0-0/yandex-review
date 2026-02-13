@@ -8,11 +8,14 @@ class YandexParserService
 {
     public function parseReviews(string $url)
     {
-        $browser = new \Symfony\Component\BrowserKit\HttpBrowser(\Symfony\Component\HttpClient\HttpClient::create([
-            'headers' => ['User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/121.0.0.0 Safari/537.36']
-        ]));
+        $scrapingant = 'https://api.scrapingant.com/v2/general';
+        $api_scrapingant = '0f7430376a954ac696885e8943f7b4d4';
 
-        $crawler = $browser->request('GET', $url);
+        $proxyUrl = $scrapingant . '?url=' . urlencode($url) . '&x-api-key=' . $api_scrapingant;
+
+        $response = file_get_contents($proxyUrl);
+        
+        $crawler = new \Symfony\Component\DomCrawler\Crawler($response);
 
         $rating = '';
         $crawler->filter('.business-summary-rating-badge-view__rating-text')->each(function ($node) use (&$rating) {
@@ -43,8 +46,7 @@ class YandexParserService
         return [
             'rating' => $rating ?: 0,
             'reviews_count' => $countText,
-            'reviews' => array_values(array_filter($reviews, fn($r) => !empty($r['text']))),
-            'zzz' => $crawler
+            'reviews' => array_values(array_filter($reviews, fn($r) => !empty($r['text'])))
         ];
     }
 }
